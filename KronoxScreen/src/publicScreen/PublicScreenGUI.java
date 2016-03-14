@@ -53,5 +53,10 @@ public class PublicScreenGUI extends JFrame {
 		panelBlackBox.setBackground(Color.BLACK);
 		panelBlackBox.setBounds(0, 184, 1920, 60);
 		contentPane.add(panelBlackBox);
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Malmo_Hogskola_Logo.png")));
+		label.setBounds(905, 25, 155, 139);
+		contentPane.add(label);
 	}
 }
