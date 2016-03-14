@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Color;
+import javax.swing.ImageIcon;
 
 public class PublicScreenGUI extends JFrame {
 
@@ -39,6 +40,11 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Welcome_to_niagara.png")));
+		lblNewLabel.setBounds(25, 125, 467, 160);
+		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
