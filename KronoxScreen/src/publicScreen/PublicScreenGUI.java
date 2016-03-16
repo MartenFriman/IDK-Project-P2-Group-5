@@ -27,7 +27,7 @@ public class PublicScreenGUI extends JFrame {
     
 	private int libSpacing = 60;
 	private int libHeight = 65;
-	private int libWidth = 1053;
+	private int libWidth = 1080;
 	
 	private int topOffset = 242;
 	private int bottomOffset = 135;
