@@ -108,8 +108,8 @@ public class PublicScreenGUI extends JFrame {
 		
 		JPanel blackBarLower = new JPanel();
 		blackBarLower.setBackground(Color.BLACK);
-		blackBarLower.setBounds(0, 1726, 1080, 194);
-		mainPanel.add(blackBarLower);
+		blackBarLower.setBounds(0, 1785, 1080, 135);
+		contentPane.add(blackBarLower);
 		blackBarLower.setLayout(null);
 		
 		JLabel lblKronoxLogo = new JLabel("");
