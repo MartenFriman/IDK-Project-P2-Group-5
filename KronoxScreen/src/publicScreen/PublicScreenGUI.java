@@ -78,5 +78,50 @@ public class PublicScreenGUI extends JFrame {
 		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
 		lblRoom.setBounds(930, 15, 112, 31);
 		panelBlackBox.add(lblRoom);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setBounds(0, 242, 1080, 65);
+		contentPane.add(panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(0, 306, 1080, 65);
+		contentPane.add(panel_2);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.WHITE);
+		panel_3.setBounds(0, 370, 1080, 65);
+		contentPane.add(panel_3);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBounds(0, 434, 1080, 65);
+		contentPane.add(panel_4);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(Color.WHITE);
+		panel_5.setBounds(0, 499, 1080, 65);
+		contentPane.add(panel_5);
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setBounds(0, 563, 1080, 65);
+		contentPane.add(panel_6);
+		
+		JPanel panel_7 = new JPanel();
+		panel_7.setBackground(Color.WHITE);
+		panel_7.setBounds(0, 627, 1080, 65);
+		contentPane.add(panel_7);
+		
+		JPanel panel_8 = new JPanel();
+		panel_8.setBounds(0, 691, 1080, 65);
+		contentPane.add(panel_8);
+		
+		JPanel panel_9 = new JPanel();
+		panel_9.setBackground(Color.WHITE);
+		panel_9.setBounds(0, 753, 1080, 65);
+		contentPane.add(panel_9);
+		
+		JPanel panel_10 = new JPanel();
+		panel_10.setBounds(0, 816, 1080, 65);
+		contentPane.add(panel_10);
 	}
 }
