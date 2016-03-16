@@ -30,6 +30,7 @@ public class PublicScreenGUI extends JFrame {
 	private int libWidth = 1053;
 	
 	private int topOffset = 242;
+	private int bottomOffset = 135;
 	
 	/**
 	 * Launch the application.
@@ -77,17 +78,62 @@ public class PublicScreenGUI extends JFrame {
 		picMalmoLogo.setBounds(905, 25, 155, 139);
 		mainPanel.add(picMalmoLogo);
 		
+		
+		
 		JPanel panelBlackBox = new JPanel();
 		panelBlackBox.setBackground(Color.BLACK);
 		panelBlackBox.setBounds(0, 184, 1080, 60);
 		mainPanel.add(panelBlackBox);
 		panelBlackBox.setLayout(null);
 		
-		JPanel panelBlackBoxLower = new JPanel();
-		panelBlackBoxLower.setBackground(Color.BLACK);
-		panelBlackBoxLower.setBounds(0, 1726, 1080, 194);
-		mainPanel.add(panelBlackBoxLower);
-		panelBlackBoxLower.setLayout(null);
+		JLabel timeLabel = new JLabel("Time");
+		timeLabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		timeLabel.setForeground(Color.WHITE);
+		timeLabel.setBounds(26, 13, 94, 31);
+		panelBlackBox.add(timeLabel);
+		
+		JLabel courseLabel = new JLabel("Course");
+		courseLabel.setForeground(Color.WHITE);
+		courseLabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		courseLabel.setBounds(158, 13, 112, 31);
+		panelBlackBox.add(courseLabel);
+		
+		JLabel roomLabel = new JLabel("Room");
+		roomLabel.setForeground(Color.WHITE);
+		roomLabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		roomLabel.setBounds(930, 13, 112, 31);
+		panelBlackBox.add(roomLabel);
+		
+		
+		
+		JPanel blackBarLower = new JPanel();
+		blackBarLower.setBackground(Color.BLACK);
+		blackBarLower.setBounds(0, 1726, 1080, 194);
+		mainPanel.add(blackBarLower);
+		blackBarLower.setLayout(null);
+		
+		JLabel lblKronoxLogo = new JLabel("");
+		lblKronoxLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/KronoxLogoSmall.png")));
+		lblKronoxLogo.setBounds(42, 17, 211, 100);
+		blackBarLower.add(lblKronoxLogo);
+		
+		JLabel lblGroupAvailable = new JLabel("Group study rooms available");
+		lblGroupAvailable.setFont(new Font("Futura", Font.PLAIN, 25));
+		lblGroupAvailable.setForeground(Color.WHITE);
+		lblGroupAvailable.setBounds(728, 6, 346, 33);
+		blackBarLower.add(lblGroupAvailable);
+		
+		JLabel lblGroupNiagara = new JLabel("Niagara:");
+		lblGroupNiagara.setForeground(Color.WHITE);
+		lblGroupNiagara.setFont(new Font("Futura", Font.PLAIN, 25));
+		lblGroupNiagara.setBounds(728, 51, 115, 33);
+		blackBarLower.add(lblGroupNiagara);
+		
+		JLabel lblGroupOrkanen = new JLabel("Orkanen:");
+		lblGroupOrkanen.setForeground(Color.WHITE);
+		lblGroupOrkanen.setFont(new Font("Futura", Font.PLAIN, 25));
+		lblGroupOrkanen.setBounds(728, 84, 115, 33);
+		blackBarLower.add(lblGroupOrkanen);
 		
 		
 		
@@ -98,13 +144,13 @@ public class PublicScreenGUI extends JFrame {
 		LIBpanel.setLayout(null);
 		
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 35; i++) {
 			LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
 		}
 		
 		libSpacing = 60/(LIBs.size()/3);
 		// 
-        for(int i = 0; i < 22; i++) {
+        for(int i = 0; i < 35; i++) {
         	JPanel LIB = new JPanel();
         	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
     		LIB.setBounds(0, topOffset + libHeight*(i+1)+ libSpacing*i, libWidth, libHeight);
@@ -139,11 +185,11 @@ public class PublicScreenGUI extends JFrame {
 		public void run() {
 			
 			int YScroll = 0;
-			while(true) {
+			while(YScroll > -(((LIBs.size()*libHeight)+(LIBs.size()*libSpacing))-(1920-topOffset-bottomOffset))) {
 				YScroll-=1;
 				LIBpanel.setLocation(5, YScroll);
 				try {
-					Thread.sleep(50);
+					Thread.sleep(25);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
