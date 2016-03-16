@@ -52,13 +52,14 @@ public class PublicScreenGUI extends JFrame {
 	 */
 	public PublicScreenGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1080, 1920);
+		setBounds(0, 0, 1080, 1920);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		//contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		setUndecorated(true);
 		
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1080, 242);
@@ -143,7 +144,7 @@ public class PublicScreenGUI extends JFrame {
 				LIBpanel.setLocation(5, YScroll);
 				LIBpanel.repaint();
 				try {
-					Thread.sleep(50);
+					Thread.sleep(25);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
