@@ -137,23 +137,22 @@ public class PublicScreenGUI extends JFrame {
 		
 		
 		
-		LIBpanel = new JPanel();
-		LIBpanel.setBounds(0, topOffset, libWidth, 2000);
-		LIBpanel.setBackground(Color.WHITE);
-		contentPane.add(LIBpanel, BorderLayout.CENTER);
-		LIBpanel.setLayout(null);
-		
-		
 		for(int i = 0; i < 35; i++) {
 			LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
 		}
 		
 		libSpacing = 60/(LIBs.size()/3);
-		// 
+		
+		LIBpanel = new JPanel();
+		LIBpanel.setBounds(0, libSpacing, libWidth, 5000);
+		LIBpanel.setBackground(Color.WHITE);
+		contentPane.add(LIBpanel, BorderLayout.CENTER);
+		LIBpanel.setLayout(null);
+		
         for(int i = 0; i < 35; i++) {
         	JPanel LIB = new JPanel();
         	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
-    		LIB.setBounds(0, topOffset + libHeight*(i+1)+ libSpacing*i, libWidth, libHeight);
+    		LIB.setBounds(0, topOffset + libHeight*(i)+ libSpacing*i, libWidth, libHeight);
     		LIB.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
     		LIBpanel.add(LIB);
     		LIB.setLayout(null);
@@ -185,16 +184,29 @@ public class PublicScreenGUI extends JFrame {
 		public void run() {
 			
 			int YScroll = 0;
+			try {
+				Thread.sleep(4000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			while(YScroll > -(((LIBs.size()*libHeight)+(LIBs.size()*libSpacing))-(1920-topOffset-bottomOffset))) {
 				YScroll-=1;
-				LIBpanel.setLocation(5, YScroll);
+				LIBpanel.setLocation(0, YScroll);
 				try {
-					Thread.sleep(25);
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+			try {
+				Thread.sleep(4000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			new LIBscrolling().start();
 		}
 	}
 	
