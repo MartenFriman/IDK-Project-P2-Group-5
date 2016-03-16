@@ -142,7 +142,6 @@ public class PublicScreenGUI extends JFrame {
 			while(true) {
 				YScroll-=1;
 				LIBpanel.setLocation(5, YScroll);
-				LIBpanel.repaint();
 				try {
 					Thread.sleep(25);
 				} catch (InterruptedException e) {
