@@ -21,7 +21,6 @@ public class PublicScreenGUI extends JFrame {
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	private JPanel LIBpanel;
-	private JTextPane txtpnTest;
 	
 	private ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
     
@@ -56,86 +55,18 @@ public class PublicScreenGUI extends JFrame {
 		setBounds(0, 0, 1080, 1920);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
-		//contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 		setUndecorated(true);
 		
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1080, 242);
 		contentPane.add(mainPanel, BorderLayout.CENTER);
-		//mainPanel.setVisible(false);
 		mainPanel.setLayout(null);
 		
-		JLabel picWelcomeToNiagara = new JLabel("");
-		picWelcomeToNiagara.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Welcome_to_niagara.png")));
-		picWelcomeToNiagara.setBounds(22, 24, 467, 160);
-		mainPanel.add(picWelcomeToNiagara);
+		drawTopBar();
 		
-		JLabel picMalmoLogo = new JLabel("");
-		picMalmoLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Malmo_Hogskola_Logo.png")));
-		picMalmoLogo.setBounds(905, 25, 155, 139);
-		mainPanel.add(picMalmoLogo);
-		
-		
-		
-		JPanel panelBlackBox = new JPanel();
-		panelBlackBox.setBackground(Color.BLACK);
-		panelBlackBox.setBounds(0, 184, 1080, 60);
-		mainPanel.add(panelBlackBox);
-		panelBlackBox.setLayout(null);
-		
-		JLabel timeLabel = new JLabel("Time");
-		timeLabel.setFont(new Font("Futura", Font.PLAIN, 30));
-		timeLabel.setForeground(Color.WHITE);
-		timeLabel.setBounds(26, 13, 94, 31);
-		panelBlackBox.add(timeLabel);
-		
-		JLabel courseLabel = new JLabel("Course");
-		courseLabel.setForeground(Color.WHITE);
-		courseLabel.setFont(new Font("Futura", Font.PLAIN, 30));
-		courseLabel.setBounds(158, 13, 112, 31);
-		panelBlackBox.add(courseLabel);
-		
-		JLabel roomLabel = new JLabel("Room");
-		roomLabel.setForeground(Color.WHITE);
-		roomLabel.setFont(new Font("Futura", Font.PLAIN, 30));
-		roomLabel.setBounds(930, 13, 112, 31);
-		panelBlackBox.add(roomLabel);
-		
-		
-		
-		JPanel blackBarLower = new JPanel();
-		blackBarLower.setBackground(Color.BLACK);
-		blackBarLower.setBounds(0, 1785, 1080, 135);
-		contentPane.add(blackBarLower);
-		blackBarLower.setLayout(null);
-		
-		JLabel lblKronoxLogo = new JLabel("");
-		lblKronoxLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/KronoxLogoSmall.png")));
-		lblKronoxLogo.setBounds(42, 17, 211, 100);
-		blackBarLower.add(lblKronoxLogo);
-		
-		JLabel lblGroupAvailable = new JLabel("Group study rooms available");
-		lblGroupAvailable.setFont(new Font("Futura", Font.PLAIN, 25));
-		lblGroupAvailable.setForeground(Color.WHITE);
-		lblGroupAvailable.setBounds(728, 6, 346, 33);
-		blackBarLower.add(lblGroupAvailable);
-		
-		JLabel lblGroupNiagara = new JLabel("Niagara:");
-		lblGroupNiagara.setForeground(Color.WHITE);
-		lblGroupNiagara.setFont(new Font("Futura", Font.PLAIN, 25));
-		lblGroupNiagara.setBounds(728, 51, 115, 33);
-		blackBarLower.add(lblGroupNiagara);
-		
-		JLabel lblGroupOrkanen = new JLabel("Orkanen:");
-		lblGroupOrkanen.setForeground(Color.WHITE);
-		lblGroupOrkanen.setFont(new Font("Futura", Font.PLAIN, 25));
-		lblGroupOrkanen.setBounds(728, 84, 115, 33);
-		blackBarLower.add(lblGroupOrkanen);
-		
-		
+		drawBottomBar();
 		
 		for(int i = 0; i < 35; i++) {
 			LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
@@ -210,7 +141,71 @@ public class PublicScreenGUI extends JFrame {
 		}
 	}
 	
-	public void drawLIBs() {
+	public void drawTopBar() {
+		JLabel picWelcomeToNiagara = new JLabel("");
+		picWelcomeToNiagara.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Welcome_to_niagara.png")));
+		picWelcomeToNiagara.setBounds(22, 24, 467, 160);
+		mainPanel.add(picWelcomeToNiagara);
 		
+		JLabel picMalmoLogo = new JLabel("");
+		picMalmoLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Malmo_Hogskola_Logo.png")));
+		picMalmoLogo.setBounds(905, 25, 155, 139);
+		mainPanel.add(picMalmoLogo);
+		
+		JPanel panelBlackBox = new JPanel();
+		panelBlackBox.setBackground(Color.BLACK);
+		panelBlackBox.setBounds(0, 184, 1080, 60);
+		mainPanel.add(panelBlackBox);
+		panelBlackBox.setLayout(null);
+		
+		JLabel timeLabel = new JLabel("Time");
+		timeLabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		timeLabel.setForeground(Color.WHITE);
+		timeLabel.setBounds(26, 13, 94, 31);
+		panelBlackBox.add(timeLabel);
+		
+		JLabel courseLabel = new JLabel("Course");
+		courseLabel.setForeground(Color.WHITE);
+		courseLabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		courseLabel.setBounds(158, 13, 112, 31);
+		panelBlackBox.add(courseLabel);
+		
+		JLabel roomLabel = new JLabel("Room");
+		roomLabel.setForeground(Color.WHITE);
+		roomLabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		roomLabel.setBounds(930, 13, 112, 31);
+		panelBlackBox.add(roomLabel);
 	}
+	
+	public void drawBottomBar() {
+		JPanel blackBarLower = new JPanel();
+		blackBarLower.setBackground(Color.BLACK);
+		blackBarLower.setBounds(0, 1785, 1080, 135);
+		contentPane.add(blackBarLower);
+		blackBarLower.setLayout(null);
+		
+		JLabel lblKronoxLogo = new JLabel("");
+		lblKronoxLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/KronoxLogoSmall.png")));
+		lblKronoxLogo.setBounds(42, 17, 211, 100);
+		blackBarLower.add(lblKronoxLogo);
+		
+		JLabel lblGroupAvailable = new JLabel("Group study rooms available");
+		lblGroupAvailable.setFont(new Font("Futura", Font.PLAIN, 25));
+		lblGroupAvailable.setForeground(Color.WHITE);
+		lblGroupAvailable.setBounds(728, 6, 346, 33);
+		blackBarLower.add(lblGroupAvailable);
+		
+		JLabel lblGroupNiagara = new JLabel("Niagara:");
+		lblGroupNiagara.setForeground(Color.WHITE);
+		lblGroupNiagara.setFont(new Font("Futura", Font.PLAIN, 25));
+		lblGroupNiagara.setBounds(728, 51, 115, 33);
+		blackBarLower.add(lblGroupNiagara);
+		
+		JLabel lblGroupOrkanen = new JLabel("Orkanen:");
+		lblGroupOrkanen.setForeground(Color.WHITE);
+		lblGroupOrkanen.setFont(new Font("Futura", Font.PLAIN, 25));
+		lblGroupOrkanen.setBounds(728, 84, 115, 33);
+		blackBarLower.add(lblGroupOrkanen);
+	}
+	
 }
