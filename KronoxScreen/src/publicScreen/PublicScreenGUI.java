@@ -114,7 +114,7 @@ public class PublicScreenGUI extends JFrame {
     		
     		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
     		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblRoom.setBounds(930, 0, 124, libHeight);
+    		lblRoom.setBounds(930, 0, 130, libHeight);
     		LIB.add(lblRoom);
 			}
 		new LIBscrolling().start();
@@ -129,6 +129,8 @@ public class PublicScreenGUI extends JFrame {
 		}
 	}
 	
+	//Main program loop
+	//
 	public class LIBscrolling extends Thread {
 		
 		@Override
