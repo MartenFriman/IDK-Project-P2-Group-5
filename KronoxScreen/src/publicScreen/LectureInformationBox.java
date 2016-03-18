@@ -10,4 +10,16 @@ public class LectureInformationBox {
 		this.course = course;
 		this.time = time;
 	}
+	
+	public String getRoom() {
+		return room;
+	}
+	
+	public String getCourse() {
+		return course;
+	}
+	
+	public String getTime() {
+		return time;
+	}
 }

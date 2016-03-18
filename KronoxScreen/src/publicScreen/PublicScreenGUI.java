@@ -23,8 +23,10 @@ public class PublicScreenGUI extends JFrame {
 	private JPanel LIBpanel;
 	private JPanel fadePanel;
 	
-	private ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
+	public ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
     
+	private kronoxParser parser;
+	
 	private int libSpacing = 60;
 	private int libHeight = 65;
 	private int libWidth = 1080;
@@ -33,6 +35,8 @@ public class PublicScreenGUI extends JFrame {
 	private int bottomOffset = 135;
 	
 	private int YScroll;
+	
+	
 	
 	/**
 	 * Launch the application.
@@ -76,9 +80,11 @@ public class PublicScreenGUI extends JFrame {
 		drawTopBar();
 		drawBottomBar();
 		
-		for(int i = 0; i < 35; i++) {
-			LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
-		}
+		//for(int i = 0; i < 35; i++) {
+		//	LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
+		//}
+		
+		LIBs = parser.parseFromKronox();
 		
 		libSpacing = 60/(LIBs.size()/3);
 		
@@ -88,7 +94,7 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.add(LIBpanel, BorderLayout.CENTER);
 		LIBpanel.setLayout(null);
 		
-        for(int i = 0; i < 35; i++) {
+        for(int i = 0; i < LIBs.size(); i++) {
         	JPanel LIB = new JPanel();
         	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
     		LIB.setBounds(0, topOffset + libHeight*(i)+ libSpacing*i, libWidth, libHeight);
@@ -96,22 +102,31 @@ public class PublicScreenGUI extends JFrame {
     		LIBpanel.add(LIB);
     		LIB.setLayout(null);
     		
-    		JLabel lblTime = new JLabel("13:25");
+    		JLabel lblTime = new JLabel(LIBs.get(i).getTime());
     		lblTime.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblTime.setBounds(24, 0, 98, libHeight);
+    		lblTime.setBounds(24, 0, 105, libHeight);
     		LIB.add(lblTime);
     		
-    		JLabel lblCourse = new JLabel("Fastighetsvetenskap: Styrning av fastighetsföretag");
+    		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
     		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
     		lblCourse.setBounds(158, 0, 753, libHeight);
     		LIB.add(lblCourse);
     		
-    		JLabel lblRoom = new JLabel("C0315");
+    		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
     		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
     		lblRoom.setBounds(930, 0, 124, libHeight);
     		LIB.add(lblRoom);
 			}
 		new LIBscrolling().start();
+	}
+	
+	public class syncFromKronox extends Thread {
+		
+		@Override
+		public void run() {
+			//TODO: TIMER
+			LIBs = parser.parseFromKronox();
+		}
 	}
 	
 	public class LIBscrolling extends Thread {
@@ -216,31 +231,15 @@ public class PublicScreenGUI extends JFrame {
 }
 
 /*
-public void fadeIn(int fadeTime) {
-    int fadeTimer = fadeTime/255;
-		for(int fade = 0; fade >= 255; fade++) {
-		    fadePanel.setBackground(new Color(255, 255, 255, fade));
-		    fadePanel.repaint();
-		    try {
-			    Thread.sleep(20);
-		    } catch (InterruptedException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
-		    }
-	    }
-	}
-
-public void fadeOut(int fadeTime) {
-    int fadeTimer = fadeTime/255;
-		for(int fade = 255; fade >= 0; fade--) {
-		    fadePanel.setBackground(new Color(255, 255, 255, fade));
-		    fadePanel.repaint();
-		    try {
-			    Thread.sleep(20);
-		    } catch (InterruptedException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
-		    }
-	    }
-	}
-*/
+ * public void fadeIn(int fadeTime) { int fadeTimer = fadeTime/255; for(int fade
+ * = 0; fade >= 255; fade++) { fadePanel.setBackground(new Color(255, 255, 255,
+ * fade)); fadePanel.repaint(); try { Thread.sleep(20); } catch
+ * (InterruptedException e) { // TODO Auto-generated catch block
+ * e.printStackTrace(); } } }
+ * 
+ * public void fadeOut(int fadeTime) { int fadeTimer = fadeTime/255; for(int
+ * fade = 255; fade >= 0; fade--) { fadePanel.setBackground(new Color(255, 255,
+ * 255, fade)); fadePanel.repaint(); try { Thread.sleep(20); } catch
+ * (InterruptedException e) { // TODO Auto-generated catch block
+ * e.printStackTrace(); } } }
+ */
