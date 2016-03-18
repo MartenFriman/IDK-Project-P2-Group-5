@@ -21,6 +21,7 @@ public class PublicScreenGUI extends JFrame {
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	private JPanel LIBpanel;
+	private JPanel fadePanel;
 	
 	private ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
     
@@ -30,6 +31,8 @@ public class PublicScreenGUI extends JFrame {
 	
 	private int topOffset = 242;
 	private int bottomOffset = 135;
+	
+	private int YScroll;
 	
 	/**
 	 * Launch the application.
@@ -64,8 +67,13 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(null);
 		
-		drawTopBar();
+		fadePanel = new JPanel();
+		fadePanel.setBounds(0, topOffset, libWidth, 1920-bottomOffset-topOffset);
+		fadePanel.setBackground(new Color(255, 255, 255, 0));
+		contentPane.add(fadePanel, BorderLayout.CENTER);
+		fadePanel.setLayout(null);
 		
+		drawTopBar();
 		drawBottomBar();
 		
 		for(int i = 0; i < 35; i++) {
@@ -103,18 +111,15 @@ public class PublicScreenGUI extends JFrame {
     		lblRoom.setBounds(930, 0, 124, libHeight);
     		LIB.add(lblRoom);
 			}
-
 		new LIBscrolling().start();
-		
-		
 	}
 	
 	public class LIBscrolling extends Thread {
 		
 		@Override
 		public void run() {
-			
-			int YScroll = 0;
+			YScroll = libSpacing;
+			LIBpanel.setLocation(0, YScroll);
 			try {
 				Thread.sleep(4000);
 			} catch (InterruptedException e) {
@@ -209,3 +214,33 @@ public class PublicScreenGUI extends JFrame {
 	}
 	
 }
+
+/*
+public void fadeIn(int fadeTime) {
+    int fadeTimer = fadeTime/255;
+		for(int fade = 0; fade >= 255; fade++) {
+		    fadePanel.setBackground(new Color(255, 255, 255, fade));
+		    fadePanel.repaint();
+		    try {
+			    Thread.sleep(20);
+		    } catch (InterruptedException e) {
+			    // TODO Auto-generated catch block
+			    e.printStackTrace();
+		    }
+	    }
+	}
+
+public void fadeOut(int fadeTime) {
+    int fadeTimer = fadeTime/255;
+		for(int fade = 255; fade >= 0; fade--) {
+		    fadePanel.setBackground(new Color(255, 255, 255, fade));
+		    fadePanel.repaint();
+		    try {
+			    Thread.sleep(20);
+		    } catch (InterruptedException e) {
+			    // TODO Auto-generated catch block
+			    e.printStackTrace();
+		    }
+	    }
+	}
+*/
