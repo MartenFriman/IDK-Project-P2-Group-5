@@ -22,10 +22,14 @@ public class PublicScreenGUI extends JFrame {
 	private JPanel mainPanel;
 	private JPanel LIBpanel;
 	private JPanel fadePanel;
+	private JLabel lblClocklabel;
+	private JLabel lblDatelabel;
 	
 	public ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
     
 	private kronoxParser parser;
+	
+	private Clock clock;
 	
 	private int libSpacing = 60;
 	private int libHeight = 65;
@@ -35,9 +39,7 @@ public class PublicScreenGUI extends JFrame {
 	private int bottomOffset = 135;
 	
 	private int YScroll;
-	
-	
-	
+		
 	/**
 	 * Launch the application.
 	 */
@@ -79,6 +81,8 @@ public class PublicScreenGUI extends JFrame {
 		
 		drawTopBar();
 		drawBottomBar();
+		
+		clock = new Clock(this);
 		
 		//for(int i = 0; i < 35; i++) {
 		//	LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
@@ -197,6 +201,16 @@ public class PublicScreenGUI extends JFrame {
 		roomLabel.setFont(new Font("Futura", Font.PLAIN, 30));
 		roomLabel.setBounds(930, 13, 112, 31);
 		panelBlackBox.add(roomLabel);
+		
+		lblClocklabel = new JLabel("00:00");
+		lblClocklabel.setBounds(670, 44, 198, 80);
+		lblClocklabel.setFont(new Font("Futura", Font.PLAIN, 79));
+		mainPanel.add(lblClocklabel);
+		
+		lblDatelabel = new JLabel("day, month, year");
+		lblDatelabel.setBounds(670, 92, 220, 80);
+		lblDatelabel.setFont(new Font("Futura", Font.PLAIN, 30));
+		mainPanel.add(lblDatelabel);
 	}
 	
 	public void drawBottomBar() {
@@ -230,6 +244,10 @@ public class PublicScreenGUI extends JFrame {
 		blackBarLower.add(lblGroupOrkanen);
 	}
 	
+	public void setTimeOnLabel(String currentTime, String currentDate) {
+		lblClocklabel.setText(currentTime);
+		lblDatelabel.setText(currentDate);
+	}
 }
 
 /*
