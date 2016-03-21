@@ -110,7 +110,7 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.add(LIBpanel, BorderLayout.CENTER);
 		LIBpanel.setLayout(null);
 		
-		reDrawSchedule();
+		drawSchedule();
         
 		new LIBscrolling().start();
 	}
@@ -186,12 +186,12 @@ public class PublicScreenGUI extends JFrame {
 		panelBlackBox.add(roomLabel);
 		
 		lblClocklabel = new JLabel("00:00");
-		lblClocklabel.setBounds(670, 44, 198, 80);
+		lblClocklabel.setBounds(650, 44, 218, 80);
 		lblClocklabel.setFont(new Font("Futura", Font.PLAIN, 79));
 		mainPanel.add(lblClocklabel);
 		
 		lblDatelabel = new JLabel("day, month, year");
-		lblDatelabel.setBounds(670, 92, 220, 80);
+		lblDatelabel.setBounds(650, 92, 230, 80);
 		lblDatelabel.setFont(new Font("Futura", Font.PLAIN, 30));
 		mainPanel.add(lblDatelabel);
 	}
@@ -236,14 +236,14 @@ public class PublicScreenGUI extends JFrame {
 		if (clock.getMinutes() == 16 && hasBeenSynced == false) {
 		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
 		LIBpanel.removeAll();
-		reDrawSchedule();
+		drawSchedule();
 		hasBeenSynced = true;
 		} else {
 			hasBeenSynced = false;
 		}
 	}
 	
-	public void reDrawSchedule() {
+	public void drawSchedule() {
 		for(int i = 0; i < LIBs.size(); i++) {
         	JPanel LIB = new JPanel();
         	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
@@ -259,12 +259,12 @@ public class PublicScreenGUI extends JFrame {
     		
     		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
     		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblCourse.setBounds(158, 0, 753, libHeight);
+    		lblCourse.setBounds(158, 0, 745, libHeight);
     		LIB.add(lblCourse);
     		
     		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
     		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblRoom.setBounds(930, 0, 130, libHeight);
+    		lblRoom.setBounds(920, 0, 150, libHeight);
     		LIB.add(lblRoom);
 			}
 	}
