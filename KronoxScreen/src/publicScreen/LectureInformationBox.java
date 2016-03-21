@@ -19,6 +19,10 @@ public class LectureInformationBox {
 		return course;
 	}
 	
+	public void setCourse(String courseName) {
+		this.course = courseName;
+	}
+	
 	public String getTime() {
 		return time;
 	}

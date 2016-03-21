@@ -44,6 +44,8 @@ public class PublicScreenGUI extends JFrame {
 	
 	private int YScroll;
 	
+	private boolean hasBeenSynced = true;
+	
 	private Font Neou_Bold;
 		
 	/**
@@ -92,11 +94,14 @@ public class PublicScreenGUI extends JFrame {
 		
 		clock = new Clock(this);
 		
-		//for(int i = 0; i < 35; i++) {
-		//	LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
-		//}
-		LIBs = parser.parseFromKronox();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
 		libSpacing = 60/(LIBs.size()/3);
 		
 		LIBpanel = new JPanel();
@@ -105,39 +110,9 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.add(LIBpanel, BorderLayout.CENTER);
 		LIBpanel.setLayout(null);
 		
-        for(int i = 0; i < LIBs.size(); i++) {
-        	JPanel LIB = new JPanel();
-        	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
-    		LIB.setBounds(0, topOffset + libHeight*(i)+ libSpacing*i, libWidth, libHeight);
-    		LIB.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
-    		LIBpanel.add(LIB);
-    		LIB.setLayout(null);
-    		
-    		JLabel lblTime = new JLabel(LIBs.get(i).getTime());
-    		lblTime.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblTime.setBounds(24, 0, 105, libHeight);
-    		LIB.add(lblTime);
-    		
-    		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
-    		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblCourse.setBounds(158, 0, 753, libHeight);
-    		LIB.add(lblCourse);
-    		
-    		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
-    		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblRoom.setBounds(930, 0, 130, libHeight);
-    		LIB.add(lblRoom);
-			}
+		reDrawSchedule();
+        
 		new LIBscrolling().start();
-	}
-	
-	public class syncFromKronox extends Thread {
-		
-		@Override
-		public void run() {
-			//TODO: TIMER
-			LIBs = parser.parseFromKronox();
-		}
 	}
 	
 	//Main program loop
@@ -146,6 +121,7 @@ public class PublicScreenGUI extends JFrame {
 		
 		@Override
 		public void run() {
+			resyncSchedule();
 			YScroll = libSpacing;
 			LIBpanel.setLocation(0, YScroll);
 			try {
@@ -254,6 +230,43 @@ public class PublicScreenGUI extends JFrame {
 	public void setTimeOnLabel(String currentTime, String currentDate) {
 		lblClocklabel.setText(currentTime);
 		lblDatelabel.setText(currentDate);
+	}
+	
+	public void resyncSchedule() {
+		if (clock.getMinutes() == 16 && hasBeenSynced == false) {
+		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
+		LIBpanel.removeAll();
+		reDrawSchedule();
+		hasBeenSynced = true;
+		} else {
+			hasBeenSynced = false;
+		}
+	}
+	
+	public void reDrawSchedule() {
+		for(int i = 0; i < LIBs.size(); i++) {
+        	JPanel LIB = new JPanel();
+        	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
+    		LIB.setBounds(0, topOffset + libHeight*(i)+ libSpacing*i, libWidth, libHeight);
+    		LIB.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+    		LIBpanel.add(LIB);
+    		LIB.setLayout(null);
+    		
+    		JLabel lblTime = new JLabel(LIBs.get(i).getTime());
+    		lblTime.setFont(new Font("Futura", Font.PLAIN, 30));
+    		lblTime.setBounds(24, 0, 105, libHeight);
+    		LIB.add(lblTime);
+    		
+    		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
+    		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
+    		lblCourse.setBounds(158, 0, 753, libHeight);
+    		LIB.add(lblCourse);
+    		
+    		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
+    		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
+    		lblRoom.setBounds(930, 0, 130, libHeight);
+    		LIB.add(lblRoom);
+			}
 	}
 	
 	public void initFonts() {
