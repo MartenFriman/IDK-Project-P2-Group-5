@@ -256,7 +256,7 @@ public class PublicScreenGUI extends JFrame {
     		LIB.setLayout(null);
     		
     		JLabel lblTime = new JLabel(LIBs.get(i).getTime());
-    		lblTime.setFont(new Font("Futura", Font.PLAIN, 30));
+    		lblTime.setFont(new Font("Futura", Font.BOLD, 30));
     		lblTime.setBounds(24, 0, 105, libHeight);
     		LIB.add(lblTime);
     		
