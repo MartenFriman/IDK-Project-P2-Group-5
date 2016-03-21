@@ -76,7 +76,7 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.setLayout(null);
 		setUndecorated(true);
 		
-		initFonts();
+		//initFonts();
 		
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1080, 242);
@@ -94,15 +94,15 @@ public class PublicScreenGUI extends JFrame {
 		
 		clock = new Clock(this);
 		
+		//Sleep to allow clock to initiate
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
-		libSpacing = 60/(LIBs.size()/3);
+		if (LIBs.size() > 2) libSpacing = 60/(LIBs.size()/3);
 		
 		LIBpanel = new JPanel();
 		LIBpanel.setBounds(0, libSpacing, libWidth, 7000);
@@ -234,11 +234,14 @@ public class PublicScreenGUI extends JFrame {
 	
 	public void resyncSchedule() {
 		if (clock.getMinutes() == 16 && hasBeenSynced == false) {
+			System.out.println("I AM SYNCING");
 		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
+		if (LIBs.size() > 2) libSpacing = 60/(LIBs.size()/3);
 		LIBpanel.removeAll();
 		drawSchedule();
 		hasBeenSynced = true;
 		} else {
+			System.out.println("I HAVE BEEN RESET");
 			hasBeenSynced = false;
 		}
 	}
@@ -268,7 +271,7 @@ public class PublicScreenGUI extends JFrame {
     		LIB.add(lblRoom);
 			}
 	}
-	
+	/*
 	public void initFonts() {
 		try {
 			Neou_Bold = Font.createFont(Font.TRUETYPE_FONT, new File("/assets/Neou-Bold.ttf")).deriveFont(79f);
@@ -279,6 +282,7 @@ public class PublicScreenGUI extends JFrame {
 		     
 		}
 	}
+	*/
 }
 
 /*
