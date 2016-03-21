@@ -186,7 +186,7 @@ public class PublicScreenGUI extends JFrame {
 		panelBlackBox.add(roomLabel);
 		
 		lblClocklabel = new JLabel("00:00");
-		lblClocklabel.setBounds(650, 44, 218, 80);
+		lblClocklabel.setBounds(650, 44, 228, 80);
 		lblClocklabel.setFont(new Font("Futura", Font.PLAIN, 79));
 		mainPanel.add(lblClocklabel);
 		
@@ -211,19 +211,19 @@ public class PublicScreenGUI extends JFrame {
 		JLabel lblGroupAvailable = new JLabel("Group study rooms available");
 		lblGroupAvailable.setFont(new Font("Futura", Font.PLAIN, 25));
 		lblGroupAvailable.setForeground(Color.WHITE);
-		lblGroupAvailable.setBounds(728, 6, 346, 33);
+		lblGroupAvailable.setBounds(78, 6, 366, 33);
 		blackBarLower.add(lblGroupAvailable);
 		
 		JLabel lblGroupNiagara = new JLabel("Niagara:");
 		lblGroupNiagara.setForeground(Color.WHITE);
 		lblGroupNiagara.setFont(new Font("Futura", Font.PLAIN, 25));
-		lblGroupNiagara.setBounds(728, 51, 115, 33);
+		lblGroupNiagara.setBounds(708, 51, 115, 33);
 		blackBarLower.add(lblGroupNiagara);
 		
 		JLabel lblGroupOrkanen = new JLabel("Orkanen:");
 		lblGroupOrkanen.setForeground(Color.WHITE);
 		lblGroupOrkanen.setFont(new Font("Futura", Font.PLAIN, 25));
-		lblGroupOrkanen.setBounds(728, 84, 115, 33);
+		lblGroupOrkanen.setBounds(708, 84, 115, 33);
 		blackBarLower.add(lblGroupOrkanen);
 	}
 	
@@ -262,7 +262,7 @@ public class PublicScreenGUI extends JFrame {
     		
     		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
     		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblCourse.setBounds(158, 0, 745, libHeight);
+    		lblCourse.setBounds(158, 0, 735, libHeight);
     		LIB.add(lblCourse);
     		
     		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
