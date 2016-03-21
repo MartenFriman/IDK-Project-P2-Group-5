@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,7 +31,7 @@ public class PublicScreenGUI extends JFrame {
 	
 	public ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
     
-	private kronoxParser parser;
+	private kronoxParser parser = new kronoxParser();
 	
 	private Clock clock;
 	
@@ -39,6 +43,8 @@ public class PublicScreenGUI extends JFrame {
 	private int bottomOffset = 135;
 	
 	private int YScroll;
+	
+	private Font Neou_Bold;
 		
 	/**
 	 * Launch the application.
@@ -68,6 +74,8 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.setLayout(null);
 		setUndecorated(true);
 		
+		initFonts();
+		
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1080, 242);
 		contentPane.add(mainPanel, BorderLayout.CENTER);
@@ -87,13 +95,12 @@ public class PublicScreenGUI extends JFrame {
 		//for(int i = 0; i < 35; i++) {
 		//	LIBs.add(new LectureInformationBox("NI:A0305", "Programming 2", "10:15"));
 		//}
-		
 		LIBs = parser.parseFromKronox();
 		
 		libSpacing = 60/(LIBs.size()/3);
 		
 		LIBpanel = new JPanel();
-		LIBpanel.setBounds(0, libSpacing, libWidth, 5000);
+		LIBpanel.setBounds(0, libSpacing, libWidth, 7000);
 		LIBpanel.setBackground(Color.WHITE);
 		contentPane.add(LIBpanel, BorderLayout.CENTER);
 		LIBpanel.setLayout(null);
@@ -151,7 +158,7 @@ public class PublicScreenGUI extends JFrame {
 				YScroll-=1;
 				LIBpanel.setLocation(0, YScroll);
 				try {
-					Thread.sleep(5);
+					Thread.sleep(16);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -169,12 +176,12 @@ public class PublicScreenGUI extends JFrame {
 	
 	public void drawTopBar() {
 		JLabel picWelcomeToNiagara = new JLabel("");
-		picWelcomeToNiagara.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Welcome_to_niagara.png")));
+		picWelcomeToNiagara.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/assets/Welcome_to_niagara.png")));
 		picWelcomeToNiagara.setBounds(22, 24, 467, 160);
 		mainPanel.add(picWelcomeToNiagara);
 		
 		JLabel picMalmoLogo = new JLabel("");
-		picMalmoLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/Malmo_Hogskola_Logo.png")));
+		picMalmoLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/assets/Malmo_Hogskola_Logo.png")));
 		picMalmoLogo.setBounds(905, 25, 155, 139);
 		mainPanel.add(picMalmoLogo);
 		
@@ -221,7 +228,7 @@ public class PublicScreenGUI extends JFrame {
 		blackBarLower.setLayout(null);
 		
 		JLabel lblKronoxLogo = new JLabel("");
-		lblKronoxLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/Images/KronoxLogoSmall.png")));
+		lblKronoxLogo.setIcon(new ImageIcon(PublicScreenGUI.class.getResource("/assets/KronoxLogoSmall.png")));
 		lblKronoxLogo.setBounds(42, 17, 211, 100);
 		blackBarLower.add(lblKronoxLogo);
 		
@@ -247,6 +254,17 @@ public class PublicScreenGUI extends JFrame {
 	public void setTimeOnLabel(String currentTime, String currentDate) {
 		lblClocklabel.setText(currentTime);
 		lblDatelabel.setText(currentDate);
+	}
+	
+	public void initFonts() {
+		try {
+			Neou_Bold = Font.createFont(Font.TRUETYPE_FONT, new File("/assets/Neou-Bold.ttf")).deriveFont(79f);
+		     GraphicsEnvironment ge = 
+		         GraphicsEnvironment.getLocalGraphicsEnvironment();
+		     ge.registerFont(Neou_Bold.createFont(Font.TRUETYPE_FONT, new File("/assets/Neou-Bold.ttf")));
+		} catch (IOException|FontFormatException e) {
+		     
+		}
 	}
 }
 
