@@ -211,7 +211,7 @@ public class PublicScreenGUI extends JFrame {
 		JLabel lblGroupAvailable = new JLabel("Group study rooms available");
 		lblGroupAvailable.setFont(new Font("Futura", Font.PLAIN, 25));
 		lblGroupAvailable.setForeground(Color.WHITE);
-		lblGroupAvailable.setBounds(78, 6, 366, 33);
+		lblGroupAvailable.setBounds(708, 6, 366, 33);
 		blackBarLower.add(lblGroupAvailable);
 		
 		JLabel lblGroupNiagara = new JLabel("Niagara:");
@@ -266,7 +266,7 @@ public class PublicScreenGUI extends JFrame {
     		LIB.add(lblCourse);
     		
     		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
-    		lblRoom.setFont(new Font("Futura", Font.PLAIN, 30));
+    		lblRoom.setFont(new Font("Futura", Font.BOLD, 30));
     		lblRoom.setBounds(920, 0, 150, libHeight);
     		LIB.add(lblRoom);
 			}
