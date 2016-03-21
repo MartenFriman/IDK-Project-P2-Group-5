@@ -262,12 +262,12 @@ public class PublicScreenGUI extends JFrame {
     		
     		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
     		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblCourse.setBounds(158, 0, 735, libHeight);
+    		lblCourse.setBounds(158, 0, 715, libHeight);
     		LIB.add(lblCourse);
     		
     		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
     		lblRoom.setFont(new Font("Futura", Font.BOLD, 30));
-    		lblRoom.setBounds(920, 0, 150, libHeight);
+    		lblRoom.setBounds(905, 0, 170, libHeight);
     		LIB.add(lblRoom);
 			}
 	}
