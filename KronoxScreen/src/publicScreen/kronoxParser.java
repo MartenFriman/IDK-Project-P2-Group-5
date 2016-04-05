@@ -1,84 +1,68 @@
 package publicScreen;
 
-import java.util.ArrayList;
-import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
-public class kronoxParser {
-	public ArrayList<LectureInformationBox> parseFromKronox(int hours, int minutes) {
-
-		ArrayList<String> time = new ArrayList<String>();
-
-		ArrayList<LectureInformationBox> superDone = new ArrayList<LectureInformationBox>();
-		String room = "";
-		String course = "";
-		String startTid = "";
-		String slutTid = "";
-		CourseNames names = new CourseNames();
-
+public class KronoxParser {
+	private PublicScreenGUI gui;
+	private Timer t;
+	public KronoxParser(PublicScreenGUI gui) {
+		this.gui = gui;
+		t = new Timer();
+		t.schedule(new ParseKronox(), 20, 240*1000);
+	}
+	public void parseFromKronox() {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse("http://schema.mah.se/setup/jsp/SchemaXML.jsp?startDatum=idag&intervallTyp=d&intervallAntal=1&sokMedAND=false&sprak=SV&resurser=l.NI%3AA0301%2Cl.NI%3AA0304%2Cl.NI%3AA0305%2Cl.NI%3AA0306%2Cl.NI%3AA0307%2Cl.NI%3AA0311%2Cl.NI%3AA0314%2Cl.NI%3AA0318%2Cl.NI%3AA0322%2Cl.NI%3AA0401%2Cl.NI%3AA0404%2Cl.NI%3AA0405%2Cl.NI%3AA0406%2Cl.NI%3AA0407%2Cl.NI%3AA0411%2Cl.NI%3AA0414%2Cl.NI%3AA0418%2Cl.NI%3AA0422%2Cl.NI%3AA0502%2Cl.NI%3AA0506%2Cl.NI%3AA0507%2Cl.NI%3AA0510%2Cl.NI%3AA0513%2Cl.NI%3AA0515%2Cl.NI%3AA0602%2Cl.NI%3AA0606%2Cl.NI%3AA0607%2Cl.NI%3AA0611%2Cl.NI%3AA0614%2Cl.NI%3AB0203%2Cl.NI%3AB0303%2Cl.NI%3AB0305%2Cl.NI%3AB0308%2Cl.NI%3AB0314%2Cl.NI%3AB0321%2Cl.NI%3AB0E07%2Cl.NI%3AB0E15%2Cl.NI%3AC0205%2Cl.NI%3AC0301%2Cl.NI%3AC0305%2Cl.NI%3AC0306%2Cl.NI%3AC0309%2Cl.NI%3AC0312%2Cl.NI%3AC0315%2Cl.NI%3AC0319%2Cl.NI%3AC0325%2Cl.NI%3AC0401%2Cl.NI%3AC0E11%2C");
+			Document doc = builder.parse(Constants.kronoxStringNiagaraTodayAndTomorrowMedForklaringar);
 			NodeList bookings = doc.getElementsByTagName("schemaPost");
 			for (int i = 0; i < bookings.getLength(); i++) {
-				boolean incorrectTime = false;
+				SchemaPost thisBooking = new SchemaPost();
 				Node p = bookings.item(i);
-				room = "";
-				course = "";
-				startTid = "";
-				slutTid = "";
 				if (p.getNodeType() == Node.ELEMENT_NODE) {
 					Element doc1 = (Element) p;
 					NodeList items2 = doc1.getElementsByTagName("bokadeDatum");
 					for (int t = 0; t < items2.getLength(); t++) {
 						Node n1 = items2.item(t);
-						if (n1.getNodeType() == Node.ELEMENT_NODE) {
-
+						if (n1.getNodeType() == Node.ELEMENT_NODE) {							
 							Element eElement = (Element) n1;
-							Node node3 = eElement.getFirstChild();
-							Node node4 = node3.getAttributes().getNamedItem("startTid");
-							Node node5 = node3.getAttributes().getNamedItem("slutTid");
-
-							startTid = node4.getNodeValue();
-							slutTid = node5.getNodeValue();
-							
-							int upperTimeBoundraryH = hours + 1;
-							//int upperTimeBoundraryM = minutes;
-							int lowerTimeBoundraryH = hours;
-							//int lowerTimeBoundraryM = minutes;
-							/*
-							if (minutes - 45 < 0) {
-								lowerTimeBoundraryH-=1;
-								lowerTimeBoundraryM = 60 + (minutes-45);
-							} else {
-								lowerTimeBoundraryM = minutes-45;
-							}
-							*/
-							//System.out.println(lowerTimeBoundraryM);	
-							String[] parts = startTid.split(Pattern.quote(":"));
-							int startTimme = Integer.parseInt(parts[0]);
-							int startMinut = Integer.parseInt(parts[1]);
-							if (startTimme < hours-1 || startTimme == hours-1 && startMinut < minutes ||
-									startTimme > hours+1 || startTimme == hours+1 && startMinut > minutes) {
-								incorrectTime = true;
-								break;
-							} else {
-							  time.add(startTid + " - " + slutTid);	
-							}
+							//Parse Start and Enddates
+							SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss"); // first example
+							String startDateTime = eElement.getAttribute("startDatumTid");
+							Date d1=format1.parse("1961-04-29 23:14:20");
+							//format1.get
+							try {
+								d1 = format1.parse(startDateTime);
+							} catch (Exception e) {}
+							Calendar startTimeCal = Calendar.getInstance();
+							startTimeCal.setTime(d1);
+							String endDateTime = eElement.getAttribute("slutDatumTid");
+							Date d2 = format1.parse( "1961-04-29 23:14:20");
+							try {
+								d2 = format1.parse( endDateTime );
+							} catch (Exception e) {e.printStackTrace();}
+							Calendar endTimeCal = Calendar.getInstance();
+							endTimeCal.setTime(d2);
+							thisBooking.setStartTime(startTimeCal);
+							thisBooking.setEndTime(endTimeCal);
 							
 						}
 					}
 				}
-				if (incorrectTime == false) {
+				//Who and where
 				if (p.getNodeType() == Node.ELEMENT_NODE) {
 					Element booking = (Element) p;
 					NodeList resource = booking.getElementsByTagName("resursNod");
@@ -93,36 +77,139 @@ public class kronoxParser {
 								if (specifiedClass.getNodeType() == Node.ELEMENT_NODE) {
 									Element name = (Element) specifiedClass;
 									if (id.contains("UTB_KURSINSTANS_GRUPPER")) {
-										course = name.getTextContent();
-
+										thisBooking.addCourse(name.getTextContent());
 									}
 									if (id.contains("RESURSER_LOKALER")) {
-										room = name.getTextContent();
+										thisBooking.addRoom(name.getTextContent());
 									}
-									
-
+									if (id.contains("RESURSER_SIGNATURER")) {
+										thisBooking.addTeacher(name.getTextContent());
+									}
 								}
-								
 							}
 						}
-						
+					}
+				//Add if there are UTB_KURSINSTANS_GRUPPER else it is grupproom
+					if (thisBooking.getCourses().size()>0){
+						//Is it only bookings that are within limit 
+						Calendar c  = Calendar.getInstance();
+						c.add(Calendar.MINUTE,Constants.minutesBefore);
+						if (thisBooking.getStartTime().compareTo(c)>0){ //StartTimeless than Constants.minutesbefore
+								if((thisBooking.getStartTime().get(Calendar.DAY_OF_YEAR)-Calendar.getInstance().get(Calendar.DAY_OF_YEAR)==1)){
+								//Tomorrow and list not full
+								if (Constants.bookingsList.size()<Constants.maxNumberPosts){ //Fill it up
+									Constants.bookingsList.add(thisBooking);
+								}else if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)>18){
+									Constants.bookingsList.add(thisBooking); //Lägg till alla i morgon om det är kväll
+								}
+							}else if ((thisBooking.getStartTime().get(Calendar.DAY_OF_YEAR)-Calendar.getInstance().get(Calendar.DAY_OF_YEAR)>1)){
+								if (Constants.bookingsList.size()<Constants.maxNumberPosts){ //Fill it up
+									Constants.bookingsList.add(thisBooking);
+								}
+							}
+							else{
+								if (Constants.bookingsList.size()<Constants.maxNumberPosts){
+									Constants.bookingsList.add(thisBooking);
+								}
+							}
+						}else{
+							if(thisBooking.getEndTime().compareTo(Calendar.getInstance())>0){  //Has not finished yet
+								if (Constants.addOngoingCourses){
+									Constants.bookingsList.add(thisBooking);
+								}
+							}
+						}
+							
 					}
 				}
-				
-				if(course.length() > 0){
-				superDone.add(new LectureInformationBox(room, course, startTid));
-			
-				}	
-				}
 			}
+			
+			//ResurseMapping
+			NodeList forklaringsraders = doc.getElementsByTagName("forklaringsrader");
+			for (int i = 0; i < forklaringsraders.getLength(); i++) {
+				Node p = forklaringsraders.item(i);
+				if (p.getNodeType() == Node.ELEMENT_NODE) {
+					Element doc1 = (Element) p;
+					//System.out.println("typ: "+doc1.getAttribute("typ"));
+					if (doc1.getAttribute("typ").equals("RESURSER_SIGNATURER")){
+						NodeList rad = doc1.getElementsByTagName("rad");
+						for(int j = 0; j<rad.getLength();j++){
+							String firstName="";
+							String lastName="";
+							String id="";
+							Node n1 = rad.item(j);
+							Element e2 = (Element)n1;
+							NodeList kolumn = e2.getElementsByTagName("kolumn");
+							for(int k = 0; k<kolumn.getLength();k++){
+								
+								Element e3 = (Element)kolumn.item(k);
+								if (e3.getAttribute("rubrik").equals("Id")){
+									id = e3.getTextContent().toLowerCase();
+								}
+								if (e3.getAttribute("rubrik").equals("ForNamn")){
+									firstName = e3.getTextContent();
+								}
+								if (e3.getAttribute("rubrik").equals("EfterNamn")){
+									lastName = e3.getTextContent();
+								}
+							}
+							Constants.resurser_signaturer.put(id, htmlDecode(firstName)+" "+htmlDecode(lastName));
+						}
+					}
+					if (doc1.getAttribute("typ").equals("UTB_KURSINSTANS_GRUPPER")){
+						NodeList rad = doc1.getElementsByTagName("rad");
+						for(int j = 0; j<rad.getLength();j++){
+							String kursNamn="";
+							String id="";
+							Node n1 = rad.item(j);
+							Element e2 = (Element)n1;
+							NodeList kolumn = e2.getElementsByTagName("kolumn");
+							for(int k = 0; k<kolumn.getLength();k++){
+								
+								Element e3 = (Element)kolumn.item(k);
+								if (e3.getAttribute("rubrik").equals("Id")){
+									//System.out.println("Id= "+e3.getTextContent());
+									id = e3.getTextContent();
+								}
+								if (e3.getAttribute("rubrik").equals("KursNamn_SV")){
+									//System.out.println("ForNamn= "+e3.getTextContent());
+									kursNamn = e3.getTextContent();
+								}
+							}
+							Constants.utb_kursinstans_grupper.put(id, htmlDecode(kursNamn));
+						}
+					}
+		       }
+		  }
 			
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		superDone = names.courseNames(superDone);
-		return superDone;
+		Collections.sort(Constants.bookingsList);
 
+	}
+	
+	private String htmlDecode(String text){
+		text = text.replace("&#197;", "Å");
+		text = text.replace("&#196;", "Å");
+		text = text.replace("&#214;", "Ö");
+		text = text.replace("&#229;", "å");
+		text = text.replace("&#228;", "ä");
+		text = text.replace("&#246;", "ö");
+		text = text.replace("&#8211;","-"); 
+		
+		return text;
+	}
+	
+	private class ParseKronox extends TimerTask{
+		@Override
+		public void run() {
+			System.out.println("PARSING");
+			Constants.bookingsList.clear();
+			parseFromKronox();
+			gui.updateInfo();
+		}		
 	}
 
 }

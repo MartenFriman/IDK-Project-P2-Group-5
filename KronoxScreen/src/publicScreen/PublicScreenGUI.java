@@ -2,51 +2,55 @@ package publicScreen;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import java.awt.Color;
 import javax.swing.ImageIcon;
-import javax.swing.JTextArea;
-import javax.swing.SpringLayout;
 
 public class PublicScreenGUI extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	private JPanel LIBpanel;
 	private JPanel fadePanel;
 	private JLabel lblClocklabel;
 	private JLabel lblDatelabel;
-	
-	public ArrayList<LectureInformationBox> LIBs = new ArrayList<LectureInformationBox>();
+	private JScrollPane scroller;
     
-	private kronoxParser parser = new kronoxParser();
+	private KronoxParser parser;
 	
 	private Clock clock;
 	
 	private int libSpacing = 60;
 	private int libHeight = 65;
 	private int libWidth = 1080;
+	private int scrollWindowHeight=1550;
 	
-	private int topOffset = 242;
+	//private int topOffset = 242;
+	private int topOffset = 182;
 	private int bottomOffset = 135;
 	
-	private int YScroll;
-	
-	private boolean hasBeenSynced = true;
-	
-	private Font Neou_Bold;
+	private int YScroll = 0;
+	private LIBscrolling libScrolling;
 		
 	/**
 	 * Launch the application.
@@ -76,77 +80,80 @@ public class PublicScreenGUI extends JFrame {
 		contentPane.setLayout(null);
 		setUndecorated(true);
 		
-		//initFonts();
-		
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1080, 242);
 		contentPane.add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(null);
 		
-		fadePanel = new JPanel();
-		fadePanel.setBounds(0, topOffset, libWidth, 1920-bottomOffset-topOffset);
-		fadePanel.setBackground(new Color(255, 255, 255, 0));
-		contentPane.add(fadePanel, BorderLayout.CENTER);
-		fadePanel.setLayout(null);
+		//fadePanel = new JPanel();
+		//fadePanel.setBounds(0, libSpacing, libWidth, 1920-bottomOffset-libHeight);
+		//fadePanel.setBackground(new Color(255, 255, 255, 0));
+		//contentPane.add(fadePanel, BorderLayout.CENTER);
+		//fadePanel.setLayout(null);
 		
 		drawTopBar();
 		drawBottomBar();
 		
-		clock = new Clock(this);
-		
-		//Sleep to allow clock to initiate
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
-		if (LIBs.size() > 2) libSpacing = 60/(LIBs.size()/3);
-		
 		LIBpanel = new JPanel();
-		LIBpanel.setBounds(0, libSpacing, libWidth, 7000);
+		LIBpanel.setBounds(0, 0, libWidth, libHeight*50);///FIX
 		LIBpanel.setBackground(Color.WHITE);
-		contentPane.add(LIBpanel, BorderLayout.CENTER);
-		LIBpanel.setLayout(null);
-		
-		drawSchedule();
+		scroller = new JScrollPane(LIBpanel);
+		scroller.setEnabled(true);
+		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); 
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller.setBounds(0, topOffset+libHeight-5, libWidth, scrollWindowHeight);  //1860 libSpacing
+		contentPane.add(scroller, BorderLayout.CENTER);
+		LIBpanel.setLayout(new GridLayout(0, 1));
         
-		new LIBscrolling().start();
+		
+		 parser = new KronoxParser(this);
+		 //libScrolling = new LIBscrolling();
+		// libScrolling.start();
+		 //libScrolling.stopScrolling();
+		 clock = new Clock(this);
 	}
 	
 	//Main program loop
 	//
 	public class LIBscrolling extends Thread {
-		
+		private boolean scroll=false;
+		public void startScrolling(){
+			scroll=true;
+			YScroll = libSpacing;
+		}
+		public void stopScrolling(){
+			scroll=false;
+			YScroll = libSpacing;
+		}
 		@Override
 		public void run() {
-			resyncSchedule();
-			YScroll = libSpacing;
-			LIBpanel.setLocation(0, YScroll);
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			while(YScroll > -(((LIBs.size()*libHeight)+(LIBs.size()*libSpacing))-(1920-topOffset-bottomOffset))) {
-				YScroll-=1;
-				LIBpanel.setLocation(0, YScroll);
-				try {
-					Thread.sleep(16);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			//resyncSchedule();
+			while(true){
+				if (scroll){
+					/*if (YScroll!=0){ //Not Firsttime
+						LIBpanel.scrollRectToVisible(new Rectangle(0, 0, 1080, 1700));
+						
+					}*/
+					YScroll = 0;
+					LIBpanel.scrollRectToVisible(new Rectangle(0, -1080, 1080, scrollWindowHeight));
+					//int max = (((Constants.bookingsList.size()*libHeight))-(1920-topOffset-bottomOffset));
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {}
+					LIBpanel.scrollRectToVisible(new Rectangle(0, 24*libHeight, 1080, scrollWindowHeight));
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {}
+					LIBpanel.scrollRectToVisible(new Rectangle(0,  48*libHeight, 1080, scrollWindowHeight));
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {}
+				}else{
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {}
 				}
 			}
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			new LIBscrolling().start();
 		}
 	}
 	
@@ -232,44 +239,140 @@ public class PublicScreenGUI extends JFrame {
 		lblDatelabel.setText(currentDate);
 	}
 	
-	public void resyncSchedule() {
-		if (clock.getMinutes() == 16 && hasBeenSynced == false) {
-			System.out.println("I AM SYNCING");
-		LIBs = parser.parseFromKronox(clock.getHours(), clock.getMinutes());
-		if (LIBs.size() > 2) libSpacing = 60/(LIBs.size()/3);
-		LIBpanel.removeAll();
-		drawSchedule();
-		hasBeenSynced = true;
-		} else {
-			System.out.println("I HAVE BEEN RESET");
-			hasBeenSynced = false;
-		}
-	}
 	
 	public void drawSchedule() {
-		for(int i = 0; i < LIBs.size(); i++) {
-        	JPanel LIB = new JPanel();
-        	if ((i & 1) == 0) LIB.setBackground(Color.WHITE);
-    		LIB.setBounds(0, topOffset + libHeight*(i)+ libSpacing*i, libWidth, libHeight);
-    		LIB.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
-    		LIBpanel.add(LIB);
-    		LIB.setLayout(null);
-    		
-    		JLabel lblTime = new JLabel(LIBs.get(i).getTime());
-    		lblTime.setFont(new Font("Futura", Font.BOLD, 30));
-    		lblTime.setBounds(24, 0, 105, libHeight);
-    		LIB.add(lblTime);
-    		
-    		JLabel lblCourse = new JLabel(LIBs.get(i).getCourse());
-    		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
-    		lblCourse.setBounds(158, 0, 715, libHeight);
-    		LIB.add(lblCourse);
-    		
-    		JLabel lblRoom = new JLabel(LIBs.get(i).getRoom());
-    		lblRoom.setFont(new Font("Futura", Font.BOLD, 30));
-    		lblRoom.setBounds(905, 0, 170, libHeight);
-    		LIB.add(lblRoom);
+		int lastNumber = 0; 
+		int nbrExtraRows = 0;		
+		for(int i = 0; i < Constants.bookingsList.size(); i++) {
+			int j = (Constants.bookingsList.get(i).getStartTime().get(Calendar.DAY_OF_YEAR)-Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+			
+			if (j!=lastNumber){
+				lastNumber = j;
+				//Add a special row:
+				JPanel extraRow = new JPanel();
+				extraRow.setLayout(new FlowLayout(FlowLayout.LEFT,15,15));
+				extraRow.setBackground(Color.GRAY);
+				extraRow.setBounds(0, 0, libWidth, libHeight);
+				extraRow.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));				
+				JLabel lblNewDay = new JLabel("Tomorrow");
+				lblNewDay.setHorizontalAlignment(JLabel.LEFT);
+				Calendar c = Calendar.getInstance();
+		
+				nbrExtraRows = nbrExtraRows + 1;
+				if (nbrExtraRows>1||(Constants.bookingsList.get(i).getStartTime().get(Calendar.DAY_OF_YEAR)-c.get(Calendar.DAY_OF_YEAR))>1){
+					
+					String day;
+					switch (Constants.bookingsList.get(i).getStartTime().get(Calendar.DAY_OF_WEEK)) {
+					case 1:
+						day="Sunday";
+						break;
+					case 2:
+						day="Monday";
+						break;
+					case 3:
+						day="Tuesday";
+						break;
+					case 4:
+						day="Wednesday";
+						break;
+					case 5:
+						day="Thursday";
+						break;
+					case 6:
+						day="Friday";
+						break;
+					case 7:
+						day="Saturday";
+						break;
+					default:
+						day="NoDay";
+						break;
+					}
+					//System.out.println("DAY: "+day);
+					lblNewDay.setText(day);
+				}
+				lblNewDay.setFont(new Font("Futura", Font.BOLD, 30));
+				lblNewDay.setBounds(24, 0, 500, libHeight);
+				extraRow.add(lblNewDay);
+				LIBpanel.add(extraRow);
+				
 			}
+			
+			ArrayList<String> courseNames = Constants.bookingsList.get(i).getCourses();
+				//System.out.println("NAMN: "+Constants.utb_kursinstans_grupper.get(courseNames.get(0)));
+				String startTime= fix(Constants.bookingsList.get(i).getStartTime().get(Calendar.HOUR_OF_DAY))+":"+fix(Constants.bookingsList.get(i).getStartTime().get(Calendar.MINUTE));
+	    		String endTime= fix(Constants.bookingsList.get(i).getEndTime().get(Calendar.HOUR_OF_DAY))+":"+fix(Constants.bookingsList.get(i).getEndTime().get(Calendar.MINUTE));
+	    		Calendar c = Calendar.getInstance();
+	    		Calendar c2 = Calendar.getInstance();
+	    		c2.add(Calendar.MINUTE, 60);
+				JPanel LIB = new JPanel();
+				LIB.setLayout(new FlowLayout(FlowLayout.LEFT,15,15));
+			
+				
+	        	if ((i & 1) == 0) 
+	        	{
+	        		if ( Constants.bookingsList.get(i).getStartTime().before(c)){ //Startat
+	        			LIB.setBackground(new Color(255,255,224,255));
+	        		}else if(Constants.bookingsList.get(i).getStartTime().before(c2)){
+	        			LIB.setBackground(new Color(230,245,172,255));
+	        		}else{
+	        			LIB.setBackground(Color.WHITE);
+	        		}
+	        	}else{
+	        		if ( Constants.bookingsList.get(i).getStartTime().before(c)){ //Startat
+	        			LIB.setBackground(new Color(238,232,170,255));
+	        		}else if(Constants.bookingsList.get(i).getStartTime().before(c2)){//Startar om 60
+	        			LIB.setBackground(new Color(186,206,106,255));
+	        		}else{
+	        			LIB.setBackground(new Color(240,240,240,255));
+	        		}
+	        	}
+	        	
+	    		LIB.setPreferredSize(new Dimension(libWidth,libHeight));
+	    		LIB.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+	    		JLabel lblTime;
+	    		if (c.before(Constants.bookingsList.get(i).getStartTime())){
+	    			lblTime = new JLabel(startTime);
+	    		}else{
+	    			lblTime = new JLabel("-"+endTime);
+	    		}
+	    		lblTime.setFont(new Font("Futura", Font.BOLD, 30));
+	    		lblTime.setPreferredSize(new Dimension(120,libHeight));
+	    		lblTime.setVerticalAlignment(JLabel.TOP);
+	    		lblTime.setHorizontalAlignment(JLabel.LEFT);
+	    		LIB.add(lblTime);
+	    		
+	    		//Course
+	    		
+	    		String firstCourseName = "";
+	    		if (courseNames.size()>0){
+	    			firstCourseName = courseNames.get(0);
+	    		}
+	    		JLabel lblCourse = new JLabel(Constants.utb_kursinstans_grupper.get(firstCourseName));
+	    		lblCourse.setFont(new Font("Futura", Font.PLAIN, 30));
+	    		lblCourse.setPreferredSize(new Dimension(715, libHeight));
+	    		lblCourse.setVerticalAlignment(JLabel.TOP);
+	    		lblCourse.setHorizontalAlignment(JLabel.LEFT);
+	    		LIB.add(lblCourse);
+	    		
+	    		//Room
+	    		ArrayList<String> rooms = Constants.bookingsList.get(i).getRooms();
+	    		String firstRoomName = "";
+	    		if (rooms.size()>0){
+	    			firstRoomName = rooms.get(0);
+	    		}
+	    		JLabel lblRoom = new JLabel(firstRoomName);
+	    		lblRoom.setFont(new Font("Futura", Font.BOLD, 30));
+	    		lblRoom.setVerticalAlignment(JLabel.TOP);
+	    		lblRoom.setHorizontalAlignment(JLabel.RIGHT);
+	    		lblRoom.setPreferredSize(new Dimension(170, libHeight));
+	    		LIB.add(lblRoom);
+	    		LIBpanel.add(LIB);
+	    		if ((i+nbrExtraRows)>24){
+	    			libScrolling.startScrolling();
+	    		}
+			}
+		contentPane.repaint();
 	}
 	/*
 	public void initFonts() {
@@ -283,18 +386,21 @@ public class PublicScreenGUI extends JFrame {
 		}
 	}
 	*/
-}
 
-/*
- * public void fadeIn(int fadeTime) { int fadeTimer = fadeTime/255; for(int fade
- * = 0; fade >= 255; fade++) { fadePanel.setBackground(new Color(255, 255, 255,
- * fade)); fadePanel.repaint(); try { Thread.sleep(20); } catch
- * (InterruptedException e) { // TODO Auto-generated catch block
- * e.printStackTrace(); } } }
- * 
- * public void fadeOut(int fadeTime) { int fadeTimer = fadeTime/255; for(int
- * fade = 255; fade >= 0; fade--) { fadePanel.setBackground(new Color(255, 255,
- * 255, fade)); fadePanel.repaint(); try { Thread.sleep(20); } catch
- * (InterruptedException e) { // TODO Auto-generated catch block
- * e.printStackTrace(); } } }
- */
+	public void updateInfo() {
+		// TODO Auto-generated method stub
+		LIBpanel.removeAll();
+			//LIBpanel.
+		drawSchedule();
+		//libScrolling.stopScrolling();
+		//libScrolling.startScrolling();
+	}
+	
+	public String fix(int i){
+		if (i<10){
+			return "0"+i;
+		}else{
+			return ""+i;
+		}
+	} 
+}

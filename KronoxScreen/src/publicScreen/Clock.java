@@ -10,10 +10,17 @@ public class Clock {
   int year = calendar.get(Calendar.YEAR);
   int minutes;
   int hours;
-  String month = "March";
-
+  String month = "-";
+   
+  public Clock(PublicScreenGUI publicScreenGUI) {
+	  this.publicScreenGUI = publicScreenGUI;  
+	  new ClockThread().start();
+  }
+  
   private class ClockThread extends Thread {
     	
+	  
+	  
     @Override
     public void run() {
     	while(true) {
@@ -30,25 +37,23 @@ public class Clock {
     			
     		String currentTime = hourCorrection + hours + ":" + minuteCorrection + minutes;
     		
-    		if (hours == 24) {
     		
-    		switch(calendar.get(Calendar.MONTH)) {
-    		case 1: month = "January";
-    		case 2: month = "February";
-    		case 3: month = "March";
-    		case 4: month = "April";
-    		case 5: month = "May";
-    		case 6: month = "June";
-    		case 7: month = "July";
-    		case 8: month = "August";
-    		case 9: month = "September";
-    		case 10: month = "October";
-    		case 11: month = "November";
-    		case 12: month = "December";
-    		}
-    		day = calendar.get(Calendar.DAY_OF_MONTH);
-    		year = calendar.get(Calendar.YEAR);
-    		}
+	    		switch(calendar.get(Calendar.MONTH)) {
+		    		case 0: month = "January";break;
+		    		case 1: month = "February";break;
+		    		case 2: month = "March";break;
+		    		case 3: month = "April";break;
+		    		case 4: month = "May";break;
+		    		case 5: month = "June";break;
+		    		case 6: month = "July";break;
+		    		case 7: month = "August";break;
+		    		case 8: month = "September";break;
+		    		case 9: month = "October";break;
+		    		case 10: month = "November";break;
+		    		case 11: month = "December";break;
+	    		}
+	    		day = calendar.get(Calendar.DAY_OF_MONTH);
+	    		year = calendar.get(Calendar.YEAR);
     		
     		String currentDate = day + " " + month + " " + year;
     		
@@ -64,11 +69,7 @@ public class Clock {
     }
   }
   
-  public Clock(PublicScreenGUI publicScreenGUI) {
-	  this.publicScreenGUI = publicScreenGUI;
-	  
-	  new ClockThread().start();
-  }
+
   
   public int getHours() {
 	  return hours;
